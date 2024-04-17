@@ -1,0 +1,257 @@
+@startuml
+enum org.bookingmanager.enums.PassengerType {
++  STANDARD
++  GOLD
++  PREMIUM
++  _unknown
+- {static} Map<String,PassengerType> ENUM_MAPPING
++ {abstract}double discountRate()
++ {static} PassengerType forValue(String)
+}
+
+
+class org.bookingmanager.repository.impl.TravelPackageRepositoryImpl {
++ ITravelPackage findTravelPackageById(int)
++ List<ITravelPackage> findByDestinationId(int)
++ void save(ITravelPackage)
+}
+
+class org.bookingmanager.services.PassengerService {
+- PassengerRepository passengerRepository
++ void createPassenger(IPassenger)
++ void printPassengerInfo(int)
+}
+
+
+class org.bookingmanager.repository.entry.DestinationEntry {
+- int id
+- String name
+}
+
+interface org.bookingmanager.repository.DestinationRepository {
+~ IDestination findDestinationById(int)
+~ void save(IDestination)
+}
+
+class org.bookingmanager.repository.entry.TravelPackageEntry {
+- int id
+- String name
+- int passengerCapacity
+- List<Integer> destinations
+- List<Integer> passengers
+}
+
+class org.bookingmanager.repository.entry.PassengerEntry {
+- String name
+- int id
+- double balance
+- PassengerType passengerType
+- List<Integer> activities
++ void setBalance(double)
++ void setActivities(List<Integer>)
+}
+
+
+class org.bookingmanager.repository.impl.PassengerRepositoryImpl {
++ IPassenger findPassengerById(int)
++ List<IPassenger> findByActivityId(int)
++ void save(IPassenger)
+}
+
+interface org.bookingmanager.interfaces.classes.IDestination {
+~ int getId()
+~ String getName()
+~ List<ITravelPackage> getTravelPackages()
+~ List<IActivity> getActivities()
+}
+
+class org.bookingmanager.repository.impl.DestinationRepositoryImpl {
++ IDestination findDestinationById(int)
++ void save(IDestination)
+}
+
+class org.bookingmanager.interfaces.classes.impl.PassengerImpl {
+- String name
+- int id
+- double balance
+- PassengerType passengerType
+- List<IActivity> activities
+- PassengerEntry passengerEntry
++ double getDiscount()
++ List<IActivity> getActivities()
++ void assignActivity(IActivity)
++ void deductBalance(double)
+}
+
+
+interface org.bookingmanager.repository.ActivityRepository {
+~ List<IActivity> findAll()
+~ IActivity findActivityById(int)
+~ List<IActivity> findByDestinationId(int)
+~ void save(IActivity,IDestination)
+}
+
+interface org.bookingmanager.interfaces.classes.IPassenger {
+~ String getName()
+~ int getId()
+~ double getBalance()
+~ double getDiscount()
+~ PassengerType getPassengerType()
+~ List<IActivity> getActivities()
+~ void assignActivity(IActivity)
+~ void deductBalance(double)
+}
+
+class org.bookingmanager.services.TravelPackageService {
+- TravelPackageRepository travelPackageRepository
+- DestinationRepository destinationRepository
+- PassengerRepository passengerRepository
++ void createPackage(ITravelPackage)
++ void assignDestinationToPackage(int,int)
++ void assignPassengerToPackage(int,int)
++ void printItinerary(int)
++ void printPassengerInfo(int)
+}
+
+
+class org.bookingmanager.services.ActivityService {
+- ActivityRepository activityRepository
+- DestinationRepository destinationRepository
+- PassengerRepository passengerRepository
++ void createActivity(IActivity,int)
++ void assignPassengerToActivity(int,int)
++ void printAvailableActivities()
+}
+
+
+class org.bookingmanager.interfaces.classes.impl.ActivityImpl {
+- int id
+- String name
+- String description
+- double cost
+- int maxCapacity
+- IDestination destination
+- List<IPassenger> passengers
+- ActivityEntry activityEntry
++ IDestination getDestination()
++ List<IPassenger> getPassengers()
+}
+
+
+class org.bookingmanager.exception.NotFoundException {
+}
+interface org.bookingmanager.interfaces.classes.ITravelPackage {
+~ String getName()
+~ int getId()
+~ int getPassengerCapacity()
+~ List<IDestination> getDestinations()
+~ List<IPassenger> getPassengers()
+~ void addPassenger(IPassenger)
+~ void addDestination(IDestination)
+}
+
+class org.bookingmanager.repository.impl.Data {
++ {static} List<ActivityEntry> activityData
++ {static} List<DestinationEntry> destinations
++ {static} List<PassengerEntry> passengers
++ {static} List<TravelPackageEntry> travelPackages
+}
+
+class org.bookingmanager.repository.entry.ActivityEntry {
+- int id
+- String name
+- String description
+- double cost
+- int maxCapacity
+- int destinationId
+}
+
+interface org.bookingmanager.repository.TravelPackageRepository {
+~ ITravelPackage findTravelPackageById(int)
+~ List<ITravelPackage> findByDestinationId(int)
+~ void save(ITravelPackage)
+}
+
+abstract class org.bookingmanager.interfaces.classes.impl.BaseClass {
+# ActivityRepository activityRepository
+- DestinationRepository destinationRepository
+# PassengerRepository passengerRepository
+# TravelPackageRepository travelPackageRepository
+# List<T> load(List<Integer>,Class<T>)
+- T getValue(Integer,Class<T>)
+}
+
+
+class org.bookingmanager.repository.impl.ActivityRepositoryImpl {
++ List<IActivity> findAll()
++ IActivity findActivityById(int)
++ List<IActivity> findByDestinationId(int)
++ void save(IActivity,IDestination)
+}
+
+class org.bookingmanager.interfaces.classes.impl.TravelPackageImpl {
+- int id
+- String name
+- int passengerCapacity
+- List<IDestination> destinations
+- List<IPassenger> passengers
+- TravelPackageEntry travelPackageEntry
++ String getName()
++ int getId()
++ int getPassengerCapacity()
++ List<IDestination> getDestinations()
++ List<IPassenger> getPassengers()
++ void addPassenger(IPassenger)
++ void addDestination(IDestination)
+}
+
+
+interface org.bookingmanager.interfaces.classes.IActivity {
+~ int getId()
+~ String getName()
+~ String getDescription()
+~ double getCost()
+~ int getMaxCapacity()
+~ IDestination getDestination()
+~ List<IPassenger> getPassengers()
+}
+
+interface org.bookingmanager.repository.PassengerRepository {
+~ IPassenger findPassengerById(int)
+~ List<IPassenger> findByActivityId(int)
+~ void save(IPassenger)
+}
+
+class org.bookingmanager.interfaces.classes.impl.DestinationImpl {
+- int id
+- String name
+- List<IActivity> activities
+- List<ITravelPackage> travelPackages
+- DestinationEntry destinationEntry
++ int getId()
++ String getName()
++ List<IActivity> getActivities()
++ List<ITravelPackage> getTravelPackages()
+}
+
+
+class org.bookingmanager.Main {
++ {static} void main(String[])
+}
+
+
+
+org.bookingmanager.repository.TravelPackageRepository <|.. org.bookingmanager.repository.impl.TravelPackageRepositoryImpl
+org.bookingmanager.repository.PassengerRepository <|.. org.bookingmanager.repository.impl.PassengerRepositoryImpl
+org.bookingmanager.repository.DestinationRepository <|.. org.bookingmanager.repository.impl.DestinationRepositoryImpl
+org.bookingmanager.interfaces.classes.IPassenger <|.. org.bookingmanager.interfaces.classes.impl.PassengerImpl
+org.bookingmanager.interfaces.classes.impl.BaseClass <|-- org.bookingmanager.interfaces.classes.impl.PassengerImpl
+org.bookingmanager.interfaces.classes.IActivity <|.. org.bookingmanager.interfaces.classes.impl.ActivityImpl
+org.bookingmanager.interfaces.classes.impl.BaseClass <|-- org.bookingmanager.interfaces.classes.impl.ActivityImpl
+org.bookingmanager.exception.RuntimeException <|-- org.bookingmanager.exception.NotFoundException
+org.bookingmanager.repository.ActivityRepository <|.. org.bookingmanager.repository.impl.ActivityRepositoryImpl
+org.bookingmanager.interfaces.classes.ITravelPackage <|.. org.bookingmanager.interfaces.classes.impl.TravelPackageImpl
+org.bookingmanager.interfaces.classes.impl.BaseClass <|-- org.bookingmanager.interfaces.classes.impl.TravelPackageImpl
+org.bookingmanager.interfaces.classes.IDestination <|.. org.bookingmanager.interfaces.classes.impl.DestinationImpl
+org.bookingmanager.interfaces.classes.impl.BaseClass <|-- org.bookingmanager.interfaces.classes.impl.DestinationImpl
+@enduml

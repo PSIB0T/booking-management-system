@@ -1,0 +1,6 @@
+"id","name","description","cost","maxCapacity","destinationId"
+"1","Hiking","Enjoy a guided hike through scenic trails","50.0","20","1"
+"2","Sightseeing Tour","Explore famous landmarks in the city","80.0","15","1"
+"3","Snorkeling Adventure","Discover underwater marine life","100.0","10","2"
+"4","Helicopter Tour","Breathtaking aerial views of the city","200.0","5","2"
+"5","Wine Tasting","Visit local vineyards and sample wines","75.0","12","3"
